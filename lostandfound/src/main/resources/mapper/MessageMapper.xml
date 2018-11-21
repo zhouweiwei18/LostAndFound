@@ -228,10 +228,10 @@
     where message_id = #{messageId,jdbcType=INTEGER}
   </update>
   
-  <select id="showAllMessage" resultMap="BaseResultMap">
+  <!-- <select id="showAllMessage" resultMap="BaseResultMap">
   	select
   	<include refid="Base_Column_List"></include>
   	from lf_message 	
-  </select>
+  </select> -->
   
 </mapper>
