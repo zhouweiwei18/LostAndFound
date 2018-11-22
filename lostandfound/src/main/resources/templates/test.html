@@ -5,19 +5,19 @@
 <title>Insert title here</title>
 </head>
 <body>
-	<table border="1">
-		<tr>
-			<td>发布人id</td>
-			<td>详细描述</td>
-			<td>物品类别id</td>
-			<td>日期</td>
-		</tr>
-		<tr th:each="m : ${messages}">
-			<td th:text="${m.messageUserId}"/>
-			<td th:text="${m.messageDescription}"/>
-			<td th:text="${m.messageCategotyid}"/>
-			<td th:text="${m.messageDate}"/>
-		</tr>
-	</table>
+	<ul th:each="m,state : ${mac}">
+		<li th:text="'编号：'+${state.count}"/>
+		<li th:text="'内容：'+${m.mes.messageDescription}"/>
+		<li th:text="'日期：'+${m.mes.messageDate}"/>
+		<li>
+			<ul th:each="c,state2 : ${m.com}">
+				<li th:text="'楼层：'+${state2.count}"/>
+				<li th:text="'评论人ID：'+${c.commentUserid}"/>
+				<li th:text="'评论内容：'+${c.commentContent}"/>
+				<li th:text="'点赞数：'+${c.commentSubmitCount}"/>
+				<li th:text=""/>
+			</ul>
+		</li>
+	</ul>
 </body>
 </html>
