@@ -1,5 +1,8 @@
 package edu.njxz.lostandfound.controller;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,25 +28,29 @@ public class UserController {
 	 * 用户的登录
 	 */
 	@RequestMapping("/userLogin")
-	public String userLogin(String username, String password) {
-
+	public Boolean userLogin(String username, String password, HttpServletRequest request) {
 		// 判断用户名是否为空
 		if (username != null && password != null) {
 			// 查询用户是否存在
 			User user = userService.userLogin(username, password);
 			// 判断user是否为空
 			if (user == null) {
-				return "false";
+				return false;
 			} else {
 				// 查看session中是否已经存在该用户
 				// 获得session
+				HttpSession session = request.getSession();
+				User userSession = (User) session.getAttribute("user");
+				// 若session中没有用户信息，则放入该用户对象
+				if (userSession == null) {
+					session.setAttribute("user", user);
+				}
 
 				// 返回成功标识
-				return "success";
+				return true;
 			}
 		}
-
-		return "false";
+		return false;
 	}
 
 }

@@ -11,6 +11,14 @@ import edu.njxz.lostandfound.entity.UserExample.Criteria;
 import edu.njxz.lostandfound.mapper.UserMapper;
 import edu.njxz.lostandfound.service.UserService;
 
+/**
+ * 用户登录的逻辑处理
+ * 
+ * @author 伟伟
+ * 
+ * @version 2018/11/23
+ *
+ */
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -33,10 +41,11 @@ public class UserServiceImpl implements UserService {
 			// 同时查询对应的密码是否正确
 			userExample.createCriteria().andUserPasswordEqualTo(password);
 			List<User> list2 = userMapper.selectByExample(userExample);
-			
+
 			if (list2.size() != 0) {
 				return list2.get(0);
 			}
+
 			// 说明密码错误
 			return null;
 
