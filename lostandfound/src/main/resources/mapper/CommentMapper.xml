@@ -187,12 +187,12 @@
     </if>
   </update>
   
-  <!-- <select id="showAllCommentByMessageId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
-  	select
+  <select id="showAllCommentByMessageId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+  	SELECT
   	<include refid="Base_Column_List"></include>
-  	from lf_comment
-  	where comment_messageId = #{messageId,jdbcType=INTEGER}
-  	order by comment_id asc
-  </select> -->
+  	FROM lf_comment
+  	WHERE comment_messageId = #{messageId,jdbcType=INTEGER}
+  	ORDER BY comment_id ASC
+  </select>
   
 </mapper>
