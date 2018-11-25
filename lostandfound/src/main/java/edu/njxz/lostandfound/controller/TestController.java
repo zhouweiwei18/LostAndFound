@@ -80,4 +80,10 @@ public class TestController {
 		return list;
 	}
 
+	@RequestMapping("/test4")
+	public String test4() {
+
+		return "picturetest";
+	}
+
 }

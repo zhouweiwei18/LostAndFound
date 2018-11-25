@@ -7,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import edu.njxz.lostandfound.entity.User;
 import edu.njxz.lostandfound.entity.UserExample;
-import edu.njxz.lostandfound.entity.UserExample.Criteria;
 import edu.njxz.lostandfound.mapper.UserMapper;
 import edu.njxz.lostandfound.service.UserService;
 
@@ -39,20 +38,33 @@ public class UserServiceImpl implements UserService {
 		if (list.size() != 0) {
 
 			// 同时查询对应的密码是否正确
-			userExample.createCriteria().andUserPasswordEqualTo(password);
-			List<User> list2 = userMapper.selectByExample(userExample);
+			/*
+			 * userExample.createCriteria().andUserPasswordEqualTo(password); List<User>
+			 * list2 = userMapper.selectByExample(userExample);
+			 * 
+			 * if (list2.size() != 0) { return list2.get(0); }
+			 */
 
-			if (list2.size() != 0) {
-				return list2.get(0);
+			// 遍历用户集合
+			for (User user : list) {
+				if (user.getUserPassword().equals(password)) {
+					return user;
+				}
 			}
 
 			// 说明密码错误
 			return null;
-
 		}
 
 		// 说明用户名不存在
 		return null;
+	}
+
+	@Override
+	public void updateUserById(User user) {
+
+		userMapper.updateByPrimaryKey(user);
+
 	}
 
 }

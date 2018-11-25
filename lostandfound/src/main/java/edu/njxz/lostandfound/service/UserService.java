@@ -7,4 +7,6 @@ public interface UserService {
 	// 用户登录
 	User userLogin(String username, String password);
 
+	void updateUserById(User user);
+
 }
