@@ -35,13 +35,6 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-	private final ResourceLoader resourceLoader;
-
-	@Autowired
-	public UserController(ResourceLoader resourceLoader) {
-		this.resourceLoader = resourceLoader;
-	}
-
 	@Value("${web.upload-path}")
 	private String path;
 
@@ -94,14 +87,16 @@ public class UserController {
 
 		User user = (User) session.getAttribute("user");
 
-		// 保存到对应用户的头像
-		user.setUserPhoto(path + "/" + FileNameUtils.getFileName(file.getOriginalFilename()));
-
-		userService.updateUserById(user);
-
-		if (FileUtils.upload(file, localPath, file.getOriginalFilename())) {
-			// 上传成功，给出页面提示
-			mapFlag.put("flag", "success");
+		if (user != null) {
+			// 保存到对应用户的头像
+			user.setUserPhoto(path + "/" + FileNameUtils.getFileName(file.getOriginalFilename()));
+			userService.updateUserById(user);
+			if (FileUtils.upload(file, localPath, file.getOriginalFilename())) {
+				// 上传成功，给出页面提示
+				mapFlag.put("flag", "success");
+			} else {
+				mapFlag.put("flag", "error");
+			}
 		} else {
 			mapFlag.put("flag", "error");
 		}
@@ -109,8 +104,8 @@ public class UserController {
 		return mapFlag;
 	}
 
-	@RequestMapping("/showUserImage")
-	public User showPhotos(String fileName, HttpServletRequest request) {
+	@RequestMapping("/showPhotos")
+	public User showPhotos(HttpServletRequest request) {
 
 		// 获取当前用户信息
 		HttpSession session = request.getSession();
