@@ -5,6 +5,8 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import edu.njxz.lostandfound.entity.Comment;
+import edu.njxz.lostandfound.entity.CommentExample;
 import edu.njxz.lostandfound.entity.User;
 import edu.njxz.lostandfound.entity.UserExample;
 import edu.njxz.lostandfound.mapper.UserMapper;
@@ -65,6 +67,14 @@ public class UserServiceImpl implements UserService {
 
 		userMapper.updateByPrimaryKey(user);
 
+	}
+
+	@Override
+	public User updateUserById(String commentUserid) {
+
+		User user = userMapper.selectByPrimaryKey(commentUserid);
+
+		return user;
 	}
 
 }
