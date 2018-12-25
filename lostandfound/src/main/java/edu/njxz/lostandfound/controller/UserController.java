@@ -9,6 +9,7 @@ import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -16,7 +17,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import edu.njxz.lostandfound.entity.User;
 import edu.njxz.lostandfound.service.UserService;
-import edu.njxz.lostandfound.utils.FileNameUtils;
 import edu.njxz.lostandfound.utils.FileUtils;
 import edu.njxz.lostandfound.utils.UUIDUtils;
 
@@ -29,6 +29,7 @@ import edu.njxz.lostandfound.utils.UUIDUtils;
  */
 @RestController
 @RequestMapping("/user")
+@CrossOrigin
 public class UserController {
 
 	@Autowired
@@ -129,7 +130,6 @@ public class UserController {
 			userService.updateUserById(user);
 			// 上传成功，给出页面提示
 			mapFlag.put("state", true);
-
 		} else {
 			mapFlag.put("state", false);
 			mapFlag.put("flag", "login in first");

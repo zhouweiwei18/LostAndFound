@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+
+	<h1>这是信息添加页面</h1>
+
+
+	<!-- 
+		Integer messageId; // 失物招领id
+		String messageDescription; // 失物招领内容描述
+		String messageUserid; // 发布者id
+		Integer messageCategotyid; // 类别id
+		Date messageDate; // 发布日期
+		String messagePhoto; // 图片路径
+	 -->
+
+	<form action="/message/messageAdd" method="post" enctype="multipart/form-data">
+
+		<p>
+			内容描述: <input type="text" name="messageDescription" />
+		</p>
+
+		<p>
+			所属类别: <select name="messageCategotyid">
+						<option value="1">证件类</option>
+						<option value="2">钱</option>
+					</select>
+		</p>
+
+		<p>
+			丢失物品图片: <input type="file" name="fileName" />
+		</p>
+		
+		<p>
+			<input type="submit" value="提交" />
+		</p>
+	</form>
+
+</body>
+</html>

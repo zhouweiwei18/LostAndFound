@@ -27,6 +27,12 @@ public class UserServiceImpl implements UserService {
 	private UserMapper userMapper;
 
 	@Override
+	public User getUserById(String id) {
+
+		return userMapper.selectByPrimaryKey(id);
+	}
+
+	@Override
 	public User userLogin(String username, String password) {
 
 		// 创建查询对象
@@ -38,14 +44,6 @@ public class UserServiceImpl implements UserService {
 
 		// 判断是否有该用户的姓名
 		if (list.size() != 0) {
-
-			// 同时查询对应的密码是否正确
-			/*
-			 * userExample.createCriteria().andUserPasswordEqualTo(password); List<User>
-			 * list2 = userMapper.selectByExample(userExample);
-			 * 
-			 * if (list2.size() != 0) { return list2.get(0); }
-			 */
 
 			// 遍历用户集合
 			for (User user : list) {

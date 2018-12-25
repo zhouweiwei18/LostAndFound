@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import edu.njxz.lostandfound.entity.Comment;
 import edu.njxz.lostandfound.entity.CommentExample;
+import edu.njxz.lostandfound.entity.CommentExample.Criteria;
 import edu.njxz.lostandfound.mapper.CommentMapper;
 import edu.njxz.lostandfound.mapper.UserMapper;
 import edu.njxz.lostandfound.service.CommentService;
@@ -16,6 +17,18 @@ public class CommentServiceImpl implements CommentService {
 
 	@Autowired
 	private CommentMapper commentMapper;
+
+	@Override
+	public List<Comment> selectAllComments(Integer messageId) {
+
+		CommentExample commExample = new CommentExample();
+
+		commExample.createCriteria().andCommentMessageidEqualTo(messageId);
+
+		List<Comment> list = commentMapper.selectByExample(commExample);
+
+		return list;
+	}
 
 	@Override
 	public List<Comment> getCommmentList() {
@@ -30,9 +43,9 @@ public class CommentServiceImpl implements CommentService {
 	 */
 	@Override
 	public int insertComment(Comment comm) {
-		
+
 		return commentMapper.insert(comm);
-		
+
 	}
 
 }

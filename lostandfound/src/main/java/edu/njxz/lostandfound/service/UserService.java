@@ -17,5 +17,9 @@ public interface UserService {
 	// 根据用户名查询用户
 	List<User> selectUserByName(String username);
 
+	//编辑用户
 	int userEdit(User user);
+	
+	//根据id查询用户
+	User getUserById(String id);
 }
