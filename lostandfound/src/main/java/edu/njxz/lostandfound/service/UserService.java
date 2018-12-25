@@ -1,5 +1,7 @@
 package edu.njxz.lostandfound.service;
 
+import java.util.List;
+
 import edu.njxz.lostandfound.entity.User;
 
 public interface UserService {
@@ -12,4 +14,8 @@ public interface UserService {
 
 	User updateUserById(String commentUserid);
 
+	// 根据用户名查询用户
+	List<User> selectUserByName(String username);
+
+	int userEdit(User user);
 }

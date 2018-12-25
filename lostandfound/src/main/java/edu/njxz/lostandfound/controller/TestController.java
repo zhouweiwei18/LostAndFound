@@ -26,6 +26,12 @@ public class TestController {
 	@Autowired
 	private UserMapper userMapper;
 
+	@RequestMapping("/html")
+	public String helloHtml(String htmlPath) {
+		 
+		return "/"+htmlPath;
+	}
+
 	/**
 	 * 测试方法 备注：@RestController 等价于 @Controller + @ResponseBody
 	 * 
