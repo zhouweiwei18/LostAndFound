@@ -17,6 +17,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.sun.org.apache.bcel.internal.generic.IFNE;
+
 import edu.njxz.lostandfound.entity.Category;
 import edu.njxz.lostandfound.entity.Comment;
 import edu.njxz.lostandfound.entity.Message;
@@ -32,7 +34,7 @@ import edu.njxz.lostandfound.vo.MUCVo;
 
 @RestController
 @RequestMapping("/message")
-@CrossOrigin
+@CrossOrigin(allowCredentials = "true")
 public class MessageController {
 
 	@Autowired
@@ -49,6 +51,165 @@ public class MessageController {
 
 	@Value("${web.upload-path}")
 	private String path;
+
+	/**
+	 * 获取当前用户发布的信息
+	 */
+	@RequestMapping("/getMessageByUser")
+	public Map<String, Object> getMessageByUserId(String id, HttpServletRequest req) {
+
+		Map<String, Object> map = new HashMap<String, Object>();
+
+		// 获取session
+		User user = (User) req.getSession().getAttribute("user");
+
+		if (user == null) {
+			// 根据id进行查询
+			User user2 = userService.getUserById(id);
+			if (user2 == null) {
+				// 说明不存在该用户
+				map.put("state", false);
+				map.put("info", "no user");
+				return map;
+			}
+			// 根据用户该id查询所有的message
+			List<Message> list = messageService.getMessageByUser(user2);
+
+			if (list != null) {
+				// 放入VO的集合
+				List<MUCVo> tempList = new ArrayList<MUCVo>();
+
+				// 对list进行重新封装
+				// 遍历list
+				for (Message message : list) {
+
+					// 封装MUCVo
+					MUCVo vo = new MUCVo();
+
+					vo.setMessageid(message.getMessageId());
+					vo.setMesdesc(message.getMessageDescription());
+					vo.setMesphoto(message.getMessagePhoto());
+
+					// 对剩余的数据进行改写封装
+					// username 根据id查询用户名
+					User u = userService.getUserById(message.getMessageUserid());
+					if (u != null) {
+						vo.setUsername(u.getUserName());
+					}
+					// categoryname
+					Category category = cateService.getCateById(message.getMessageCategotyid());
+					if (category != null) {
+						vo.setCategoryname(category.getCategoryName());
+					}
+					// date 转为字符串格式
+					Date date = message.getMessageDate();
+					String strDate = DateTimeUtil.dateToStr(date);
+					vo.setDate(strDate);
+
+					// 下面封装评论
+					// 根据message的id查询出来
+					List<Comment> comList = commService.selectAllComments(message.getMessageId());
+					// vo.setCommlist(comList);
+
+					if (comList != null) {
+						List<CommUser> culist = new ArrayList<CommUser>();
+						// 二次封装评论
+						for (Comment comment : comList) {
+							CommUser cu = new CommUser();
+							// 根据id查询用户
+							User comu = userService.getUserById(comment.getCommentUserid());
+							if (comu != null) {
+								cu.setCommuser(comu.getUserName());
+							}
+							cu.setComment(comment.getCommentContent());
+							culist.add(cu);
+						}
+						vo.setCommlist(culist);
+					}
+
+					// 将vo添加到集合
+					tempList.add(vo);
+				}
+
+				map.put("message", tempList);
+				map.put("state", true);
+
+				return map;
+			} else {
+				map.put("state", false);
+				map.put("message", "no message");
+				return map;
+			}
+		} else {
+			// 根据用户该id查询所有的message
+			List<Message> list = messageService.getMessageByUser(user);
+
+			if (list != null) {
+				// 放入VO的集合
+				List<MUCVo> tempList = new ArrayList<MUCVo>();
+
+				// 对list进行重新封装
+				// 遍历list
+				for (Message message : list) {
+
+					// 封装MUCVo
+					MUCVo vo = new MUCVo();
+
+					vo.setMessageid(message.getMessageId());
+					vo.setMesdesc(message.getMessageDescription());
+					vo.setMesphoto(message.getMessagePhoto());
+
+					// 对剩余的数据进行改写封装
+					// username 根据id查询用户名
+					User u = userService.getUserById(message.getMessageUserid());
+					if (u != null) {
+						vo.setUsername(u.getUserName());
+					}
+					// categoryname
+					Category category = cateService.getCateById(message.getMessageCategotyid());
+					if (category != null) {
+						vo.setCategoryname(category.getCategoryName());
+					}
+					// date 转为字符串格式
+					Date date = message.getMessageDate();
+					String strDate = DateTimeUtil.dateToStr(date);
+					vo.setDate(strDate);
+
+					// 下面封装评论
+					// 根据message的id查询出来
+					List<Comment> comList = commService.selectAllComments(message.getMessageId());
+					// vo.setCommlist(comList);
+
+					if (comList != null) {
+						List<CommUser> culist = new ArrayList<CommUser>();
+						// 二次封装评论
+						for (Comment comment : comList) {
+							CommUser cu = new CommUser();
+							// 根据id查询用户
+							User comu = userService.getUserById(comment.getCommentUserid());
+							if (comu != null) {
+								cu.setCommuser(comu.getUserName());
+							}
+							cu.setComment(comment.getCommentContent());
+							culist.add(cu);
+						}
+						vo.setCommlist(culist);
+					}
+
+					// 将vo添加到集合
+					tempList.add(vo);
+				}
+
+				map.put("message", tempList);
+				map.put("state", true);
+				return map;
+			} else {
+				map.put("state", false);
+				map.put("message", "no message");
+				return map;
+			}
+		}
+	}
 
 	/**
 	 * 添加招领信息
@@ -106,9 +267,15 @@ public class MessageController {
 	 * @return
 	 */
 	@RequestMapping("/getCategories")
-	public List<Category> getCategories() {
+	public Map<String, Object> getCategories() {
+		Map<String, Object> map = new HashMap<String, Object>();
 
-		return cateService.getAllCategories();
+		List<Category> list = cateService.getAllCategories();
+		if (list != null) {
+			map.put("category", list);
+
+		}
+		return map;
 	}
 
 	/**

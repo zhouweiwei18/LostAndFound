@@ -29,7 +29,7 @@ import edu.njxz.lostandfound.utils.UUIDUtils;
  */
 @RestController
 @RequestMapping("/user")
-@CrossOrigin
+@CrossOrigin(allowCredentials = "true")
 public class UserController {
 
 	@Autowired
@@ -72,6 +72,8 @@ public class UserController {
 		return map;
 	}
 
+	User user;
+
 	/**
 	 * 用户的登录
 	 */
@@ -81,7 +83,7 @@ public class UserController {
 		// 判断用户名是否为空
 		if ((username != null && password != null) && (!username.equals("") && !password.equals(""))) {
 			// 查询用户是否存在
-			User user = userService.userLogin(username, password);
+			user = userService.userLogin(username, password);
 			// 判断user是否为空
 			if (user == null) {
 				return false;
@@ -93,8 +95,9 @@ public class UserController {
 				// 若session中没有用户信息，则放入该用户对象
 				if (userSession == null) {
 					session.setAttribute("user", user);
+					System.out.println("------------------------");
 				}
-
+				System.out.println(request.getSession().getAttribute("user"));
 				// 返回成功标识
 				return true;
 			}
@@ -145,6 +148,12 @@ public class UserController {
 		HttpSession session = request.getSession();
 
 		User user = (User) session.getAttribute("user");
+
+		if (user == null) {
+			user = this.user;
+		}
+
+		System.out.println(user);
 
 		return user;
 	}

@@ -28,7 +28,7 @@ import edu.njxz.lostandfound.vo.ComAndUser;
  */
 @RestController
 @RequestMapping("/comment")
-@CrossOrigin
+@CrossOrigin(allowCredentials = "true")
 public class CommentController {
 
 	@Autowired
@@ -38,12 +38,13 @@ public class CommentController {
 	private UserService userService;
 
 	@RequestMapping("/addComment")
-	public Map<String, Object> commentAdd(Integer messageid, String comment, HttpServletRequest req) {
+	public Map<String, Object> commentAdd(String mid, String comment, HttpServletRequest req) {
 
-		//**********************************************
+		// **********************************************
 		// 首先对于该信息模块的id进行查询，校验是否存在
 		// 待续。。。。。
-		//**********************************************
+		// **********************************************
+		Integer messageid = Integer.valueOf(mid);
 
 		// 封装一个comment用于插入评论
 		Comment comm = new Comment();
@@ -88,7 +89,9 @@ public class CommentController {
 	 * @return
 	 */
 	@RequestMapping("/list")
-	public List<ComAndUser> commentList() {
+	public List<ComAndUser> commentList(){
+
+		//Map<String, Object> map = new HashMap<String, Object>();
 
 		// 创建一个List<ComAndUser>用于封装前端需要的数据
 		List<ComAndUser> list = new ArrayList<ComAndUser>();
@@ -117,7 +120,10 @@ public class CommentController {
 				// 将ComAndUser添加到集合中
 				list.add(cau);
 			}
+
 		}
+		// 将结果添加到集合
+		//map.put("comment", list);
 		return list;
 	}
 

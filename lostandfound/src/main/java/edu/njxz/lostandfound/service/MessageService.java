@@ -4,6 +4,7 @@ import java.util.List;
 
 import edu.njxz.lostandfound.entity.Category;
 import edu.njxz.lostandfound.entity.Message;
+import edu.njxz.lostandfound.entity.User;
 
 public interface MessageService {
 
@@ -18,5 +19,8 @@ public interface MessageService {
 
 	// 添加一个Message信息
 	int addMessage(Message message);
+
+	//根据用户id查询message
+	List<Message> getMessageByUser(User user);
 
 }

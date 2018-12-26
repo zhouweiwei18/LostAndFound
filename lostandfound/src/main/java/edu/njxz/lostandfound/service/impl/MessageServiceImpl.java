@@ -5,11 +5,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import edu.njxz.lostandfound.entity.Category;
-import edu.njxz.lostandfound.entity.CategoryExample;
 import edu.njxz.lostandfound.entity.Message;
 import edu.njxz.lostandfound.entity.MessageExample;
-import edu.njxz.lostandfound.mapper.CategoryMapper;
+import edu.njxz.lostandfound.entity.User;
 import edu.njxz.lostandfound.mapper.MessageMapper;
 import edu.njxz.lostandfound.service.MessageService;
 
@@ -18,6 +16,16 @@ public class MessageServiceImpl implements MessageService {
 
 	@Autowired
 	private MessageMapper messageMapper;
+
+	@Override
+	public List<Message> getMessageByUser(User user) {
+
+		MessageExample example = new MessageExample();
+
+		example.createCriteria().andMessageUseridEqualTo(user.getUserId());
+
+		return messageMapper.selectByExample(example);
+	}
 
 	@Override
 	public int addMessage(Message message) {

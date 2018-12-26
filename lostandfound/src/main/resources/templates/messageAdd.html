@@ -1,13 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="UTF-8">
-<title>Insert title here</title>
+<script src="https://cdn.staticfile.org/jquery/1.10.2/jquery.min.js"></script>
+<script>
+$(document).ready(function(){
+	alert();
+	var user = $.session.get('user.userName');
+	
+	alert(user);
+	
+});
+</script>
 </head>
+
+
+
+
+
 <body>
 
 	<h1>这是信息添加页面</h1>
-
 
 	<!-- 
 		Integer messageId; // 失物招领id
@@ -18,7 +30,8 @@
 		String messagePhoto; // 图片路径
 	 -->
 
-	<form action="/message/messageAdd" method="post" enctype="multipart/form-data">
+	<form action="/message/messageAdd" method="post"
+		enctype="multipart/form-data">
 
 		<p>
 			内容描述: <input type="text" name="messageDescription" />
@@ -26,15 +39,15 @@
 
 		<p>
 			所属类别: <select name="messageCategotyid">
-						<option value="1">证件类</option>
-						<option value="2">钱</option>
-					</select>
+				<option value="1">证件类</option>
+				<option value="2">钱</option>
+			</select>
 		</p>
 
 		<p>
 			丢失物品图片: <input type="file" name="fileName" />
 		</p>
-		
+
 		<p>
 			<input type="submit" value="提交" />
 		</p>
